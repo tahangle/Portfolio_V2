@@ -118,6 +118,22 @@ main {
     touch-action: none;
 }
 
+.draw-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'TimesNow', serif;
+    font-size: 14px;
+    font-weight: 200;
+    text-transform: uppercase;
+    color: #000;
+    opacity: 0;
+    z-index: 100;
+    pointer-events: none;
+    display: none;
+}
+
 .center-text {
     position: fixed;
     top: 50%;
@@ -135,6 +151,13 @@ main {
 
 .center-text .bold-text {
     font-weight: 300;
+}
+
+@media (max-width: 768px) {
+    .draw-prompt {
+        display: block;
+        opacity: 1;
+    }
 }
 
 /* Contact Page */

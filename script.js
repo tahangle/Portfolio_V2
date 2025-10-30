@@ -81,12 +81,22 @@ document.addEventListener('DOMContentLoaded', function() {
             let isTouching = false;
             let touchReleased = false;
             const mobileMovementThreshold = 800; // Minimum drawing before text appears
+            const drawPrompt = document.getElementById('drawPrompt');
 
             homepage.addEventListener('touchstart', function(e) {
                 isTouching = true;
                 const touch = e.touches[0];
                 lastX = touch.clientX;
                 lastY = touch.clientY;
+
+                // Hide "draw here" prompt on first touch
+                if (drawPrompt && drawPrompt.style.opacity !== '0') {
+                    gsap.to(drawPrompt, {
+                        opacity: 0,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                }
             }, { passive: true });
 
             homepage.addEventListener('touchmove', function(e) {
