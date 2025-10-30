@@ -489,7 +489,7 @@ li {
         margin-bottom: 0;
     }
 
-    .info-columns {
+    .about-page .info-columns {
         flex-direction: column;
         gap: 70px;
         margin-top: 0;
