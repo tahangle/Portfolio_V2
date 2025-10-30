@@ -161,6 +161,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Cursor trail animation for desktop
         if (!isMobile) {
+            let cursorStopTimer = null;
+            let hasMovedEnough = false;
+            const minMovementForText = 500; // Minimum movement before text can appear
+
             homepage.addEventListener('mousemove', function(e) {
                 const currentTime = Date.now();
 
@@ -171,16 +175,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     totalMovement += distance;
 
-                    // Show center text after threshold
-                    if (!hasShownText && totalMovement >= movementThreshold) {
+                    // Mark that user has moved enough
+                    if (totalMovement >= minMovementForText) {
+                        hasMovedEnough = true;
+                    }
+                }
+                lastX = e.clientX;
+                lastY = e.clientY;
+
+                // Create image trail
+                if (currentTime - lastImageTime >= separationTime) {
+                    createImageAt(e.clientX, e.clientY);
+                    lastImageTime = currentTime;
+                }
+
+                // Clear previous timer
+                if (cursorStopTimer) {
+                    clearTimeout(cursorStopTimer);
+                }
+
+                // Set timer to detect when cursor stops
+                if (!hasShownText && hasMovedEnough) {
+                    cursorStopTimer = setTimeout(function() {
+                        // Cursor has stopped moving, show text
                         gsap.to(centerText, {
                             opacity: 1,
-                            duration: 2,
+                            duration: 1.5,
                             ease: 'power2.out'
                         });
                         hasShownText = true;
 
-                        // Change text after 3 seconds
+                        // Change text after 2 seconds
                         setTimeout(function() {
                             gsap.to(centerText, {
                                 opacity: 0,
@@ -195,15 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                     });
                                 }
                             });
-                        }, 3000);
-                    }
-                }
-                lastX = e.clientX;
-                lastY = e.clientY;
-
-                if (currentTime - lastImageTime >= separationTime) {
-                    createImageAt(e.clientX, e.clientY);
-                    lastImageTime = currentTime;
+                        }, 2000);
+                    }, 800); // Wait 800ms after cursor stops
                 }
             });
         }
