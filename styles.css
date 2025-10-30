@@ -115,6 +115,7 @@ main {
     overflow: hidden;
     cursor: none;
     position: relative;
+    touch-action: none;
 }
 
 .center-text {

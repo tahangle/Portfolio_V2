@@ -76,77 +76,52 @@ document.addEventListener('DOMContentLoaded', function() {
             currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
         }
 
-        // Mobile auto-play animation
+        // Mobile touch drawing interaction
         if (isMobile) {
-            let autoPlayInterval;
-            let pathIndex = 0;
-            let currentPath = [];
-            const mobileMovementThreshold = 1200; // Much faster text reveal - people are impatient!
+            let isTouching = false;
+            let touchReleased = false;
+            const mobileMovementThreshold = 800; // Minimum drawing before text appears
 
-            // Generate flowing lasso/S-curve path that avoids center
-            function generatePath() {
-                const path = [];
-                const numPoints = 120;
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                const width = window.innerWidth;
-                const height = window.innerHeight;
+            homepage.addEventListener('touchstart', function(e) {
+                isTouching = true;
+                const touch = e.touches[0];
+                lastX = touch.clientX;
+                lastY = touch.clientY;
+            }, { passive: true });
 
-                // Random parameters for variety each time
-                const flowDirection = Math.random() > 0.5 ? 1 : -1; // Clockwise or counter-clockwise
-                const verticalBias = 0.3 + Math.random() * 0.4; // How much vertical vs horizontal
-                const waveAmplitude = 40 + Math.random() * 60;
-                const rotation = Math.random() * Math.PI / 4; // Slight rotation variation
+            homepage.addEventListener('touchmove', function(e) {
+                if (!isTouching) return;
 
-                for (let i = 0; i < numPoints; i++) {
-                    const t = (i / numPoints) * Math.PI * 2; // Full loop
+                const touch = e.touches[0];
+                const currentTime = Date.now();
 
-                    // Create flowing S-curve using sine waves
-                    const baseX = Math.cos(t) * (width * 0.35);
-                    const baseY = Math.sin(t * 2) * (height * verticalBias * 0.35); // Double frequency for S-shape
-
-                    // Add organic wave variation
-                    const waveX = Math.sin(t * 3 + rotation) * waveAmplitude * flowDirection;
-                    const waveY = Math.cos(t * 4) * waveAmplitude;
-
-                    // Rotate and position
-                    const angle = rotation;
-                    const rotatedX = baseX * Math.cos(angle) - baseY * Math.sin(angle);
-                    const rotatedY = baseX * Math.sin(angle) + baseY * Math.cos(angle);
-
-                    let x = centerX + rotatedX + waveX;
-                    let y = centerY + rotatedY + waveY;
-
-                    // Keep within bounds with padding
-                    x = Math.max(60, Math.min(width - 60, x));
-                    y = Math.max(100, Math.min(height - 100, y));
-
-                    path.push({ x, y });
-                }
-
-                return path;
-            }
-
-            currentPath = generatePath();
-
-            // Elegant interval timing
-            autoPlayInterval = setInterval(function() {
-                if (pathIndex >= currentPath.length) {
-                    currentPath = generatePath(); // Generate new path each loop
-                    pathIndex = 0;
-                }
-
-                const point = currentPath[pathIndex];
-                createImageAt(point.x, point.y);
-
-                // Track movement for text reveal (much faster on mobile)
+                // Track movement distance
                 if (lastX !== 0 && lastY !== 0) {
-                    const dx = point.x - lastX;
-                    const dy = point.y - lastY;
+                    const dx = touch.clientX - lastX;
+                    const dy = touch.clientY - lastY;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     totalMovement += distance;
+                }
 
-                    if (!hasShownText && totalMovement >= mobileMovementThreshold) {
+                // Create image trail while drawing
+                if (currentTime - lastImageTime >= separationTime) {
+                    createImageAt(touch.clientX, touch.clientY);
+                    lastImageTime = currentTime;
+                }
+
+                lastX = touch.clientX;
+                lastY = touch.clientY;
+            }, { passive: true });
+
+            homepage.addEventListener('touchend', function(e) {
+                isTouching = false;
+
+                // Show text when user releases touch (if they drew enough)
+                if (!hasShownText && !touchReleased && totalMovement >= mobileMovementThreshold) {
+                    touchReleased = true;
+
+                    // Small delay to let last images appear
+                    setTimeout(function() {
                         gsap.to(centerText, {
                             opacity: 1,
                             duration: 1.5,
@@ -168,14 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                     });
                                 }
                             });
-                        }, 1500); // Even faster on mobile - 1.5 seconds
-                    }
+                        }, 1500);
+                    }, 300);
                 }
-                lastX = point.x;
-                lastY = point.y;
-
-                pathIndex++;
-            }, 100); // Smooth timing
+            }, { passive: true });
         }
 
         // Cursor trail animation for desktop
