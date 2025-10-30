@@ -200,6 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Click to go to About page
         homepage.addEventListener('click', function() {
+            // On mobile, only allow click after text has appeared
+            if (isMobile && !hasShownText) {
+                return;
+            }
             window.location.href = 'about.html';
         });
     }
@@ -229,10 +233,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Click to go to Projects page
-        aboutPage.addEventListener('click', function() {
-            window.location.href = 'projects.html';
-        });
+        // Click to go to Projects page (desktop only)
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        if (!isMobile) {
+            aboutPage.addEventListener('click', function() {
+                window.location.href = 'projects.html';
+            });
+        }
     }
 
     // ==== PROJECTS PAGE ====
