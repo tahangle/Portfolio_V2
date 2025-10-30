@@ -81,33 +81,60 @@ document.addEventListener('DOMContentLoaded', function() {
             let autoPlayInterval;
             let pathIndex = 0;
             let currentPath = [];
+            const mobileMovementThreshold = 2000; // Faster text reveal on mobile
 
-            // Generate smooth random path
+            // Generate elegant smooth path that avoids center
             function generatePath() {
                 const path = [];
-                const numPoints = 50;
-                const startX = Math.random() * window.innerWidth;
-                const startY = Math.random() * window.innerHeight;
+                const numPoints = 80;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const avoidRadius = 150; // Keep clear of center
+
+                // Start from a random edge
+                const startSide = Math.floor(Math.random() * 4);
+                let startX, startY;
+
+                switch(startSide) {
+                    case 0: startX = Math.random() * window.innerWidth; startY = 80; break;
+                    case 1: startX = window.innerWidth - 80; startY = Math.random() * window.innerHeight; break;
+                    case 2: startX = Math.random() * window.innerWidth; startY = window.innerHeight - 80; break;
+                    case 3: startX = 80; startY = Math.random() * window.innerHeight; break;
+                }
+
+                let currentX = startX;
+                let currentY = startY;
+                let angle = Math.random() * Math.PI * 2;
 
                 for (let i = 0; i < numPoints; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = 20 + Math.random() * 30;
-                    const prevPoint = path.length > 0 ? path[path.length - 1] : { x: startX, y: startY };
+                    // Smooth curved motion
+                    angle += (Math.random() - 0.5) * 0.3;
+                    const distance = 15 + Math.random() * 20;
 
-                    let x = prevPoint.x + Math.cos(angle) * distance;
-                    let y = prevPoint.y + Math.sin(angle) * distance;
+                    currentX += Math.cos(angle) * distance;
+                    currentY += Math.sin(angle) * distance;
 
-                    // Keep within bounds
-                    x = Math.max(100, Math.min(window.innerWidth - 100, x));
-                    y = Math.max(100, Math.min(window.innerHeight - 100, y));
+                    // Keep within bounds with padding
+                    currentX = Math.max(80, Math.min(window.innerWidth - 80, currentX));
+                    currentY = Math.max(80, Math.min(window.innerHeight - 80, currentY));
 
-                    path.push({ x, y });
+                    // Avoid center area
+                    const distToCenter = Math.sqrt(Math.pow(currentX - centerX, 2) + Math.pow(currentY - centerY, 2));
+                    if (distToCenter < avoidRadius) {
+                        const angleFromCenter = Math.atan2(currentY - centerY, currentX - centerX);
+                        currentX = centerX + Math.cos(angleFromCenter) * avoidRadius;
+                        currentY = centerY + Math.sin(angleFromCenter) * avoidRadius;
+                        angle = angleFromCenter + Math.PI / 2; // Curve around center
+                    }
+
+                    path.push({ x: currentX, y: currentY });
                 }
                 return path;
             }
 
             currentPath = generatePath();
 
+            // Slower interval for mobile - more elegant
             autoPlayInterval = setInterval(function() {
                 if (pathIndex >= currentPath.length) {
                     currentPath = generatePath();
@@ -117,14 +144,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const point = currentPath[pathIndex];
                 createImageAt(point.x, point.y);
 
-                // Track movement for text reveal
+                // Track movement for text reveal (faster on mobile)
                 if (lastX !== 0 && lastY !== 0) {
                     const dx = point.x - lastX;
                     const dy = point.y - lastY;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     totalMovement += distance;
 
-                    if (!hasShownText && totalMovement >= movementThreshold) {
+                    if (!hasShownText && totalMovement >= mobileMovementThreshold) {
                         gsap.to(centerText, {
                             opacity: 1,
                             duration: 2,
@@ -146,14 +173,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                     });
                                 }
                             });
-                        }, 3000);
+                        }, 2000); // Shorter wait on mobile
                     }
                 }
                 lastX = point.x;
                 lastY = point.y;
 
                 pathIndex++;
-            }, separationTime);
+            }, 120); // Slower - double the separation time for more elegant feel
         }
 
         // Cursor trail animation for desktop
