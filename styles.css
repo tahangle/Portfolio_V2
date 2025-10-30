@@ -184,6 +184,7 @@ main {
     display: flex;
     gap: 100px;
     align-items: flex-start;
+    min-height: calc(100vh - 140px);
 }
 
 .about-page .intro {
@@ -200,14 +201,31 @@ main {
 
 .about-page .info-columns {
     display: flex;
-    gap: 100px;
-    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
     opacity: 0;
+    font-size: 32px;
+    line-height: 1.2;
 }
 
 .services,
 .contact {
     flex: 0 0 auto;
+}
+
+.services h2,
+.contact h2 {
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.services ul,
+.contact p,
+.contact a {
+    font-size: 32px;
+    line-height: 1.2;
 }
 
 h2 {
