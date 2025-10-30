@@ -214,6 +214,10 @@ main {
     flex: 0 0 auto;
 }
 
+.contact {
+    margin-top: 80px;
+}
+
 .services h2,
 .contact h2 {
     font-size: 32px;
@@ -450,6 +454,7 @@ li {
         display: flex;
         flex-direction: column;
         padding-bottom: 0;
+        font-size: 20px;
     }
 
     .draw-prompt {
