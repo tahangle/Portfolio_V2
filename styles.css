@@ -153,13 +153,6 @@ main {
     font-weight: 300;
 }
 
-@media (max-width: 768px) {
-    .draw-prompt {
-        display: block;
-        opacity: 1;
-    }
-}
-
 /* Contact Page */
 .contact-page {
     padding: 0;
@@ -437,6 +430,11 @@ li {
         display: flex;
         flex-direction: column;
         padding-bottom: 0;
+    }
+
+    .draw-prompt {
+        display: block;
+        opacity: 1;
     }
 
     header {
