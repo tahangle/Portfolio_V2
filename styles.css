@@ -71,6 +71,8 @@ header {
     font-weight: 200;
     text-transform: uppercase;
     cursor: pointer;
+    color: #000;
+    text-decoration: none;
 }
 
 nav {
@@ -106,7 +108,68 @@ main {
     align-items: flex-start;
 }
 
-.intro {
+/* Homepage */
+.homepage {
+    padding: 0;
+    height: calc(100vh - 120px);
+    overflow: hidden;
+    cursor: none;
+    position: relative;
+}
+
+.center-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'TimesNow', serif;
+    font-size: 14px;
+    font-weight: 200;
+    text-transform: uppercase;
+    color: #000;
+    opacity: 0;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.center-text .bold-text {
+    font-weight: 300;
+}
+
+/* Contact Page */
+.contact-page {
+    padding: 0;
+    height: calc(100vh - 120px);
+    overflow: hidden;
+}
+
+#cursor-trail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.cursor-image {
+    position: fixed;
+    width: 100px;
+    height: auto;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    z-index: 50;
+}
+
+.about-page {
+    padding: 80px 60px 60px;
+    display: flex;
+    gap: 100px;
+    align-items: flex-start;
+}
+
+.about-page .intro {
     flex: 0 0 auto;
     max-width: 500px;
     opacity: 0;
@@ -116,7 +179,7 @@ main {
     margin-bottom: 20px;
 }
 
-.info-columns {
+.about-page .info-columns {
     display: flex;
     gap: 100px;
     flex: 0 0 auto;
@@ -178,6 +241,7 @@ li {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    opacity: 0;
 }
 
 .project-item {
@@ -300,6 +364,7 @@ li {
     height: 100vh;
     cursor: none;
     z-index: 1;
+    padding: 80px 60px;
 }
 
 .gallery-slide {
@@ -314,6 +379,13 @@ li {
 
 .gallery-slide.active {
     opacity: 1;
+}
+
+.gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .gallery-cursor {
@@ -372,7 +444,7 @@ li {
     main {
         flex-direction: column;
         padding: 40px 30px 20px;
-        gap: 30px;
+        gap: 20px;
         flex: 1;
         overflow-y: auto;
         margin-bottom: 0;
@@ -388,7 +460,7 @@ li {
 
     .info-columns {
         flex-direction: column;
-        gap: 30px;
+        gap: 20px;
     }
 
     .projects-main {
