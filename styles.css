@@ -190,6 +190,8 @@ main {
     flex: 0 0 auto;
     max-width: 500px;
     opacity: 0;
+    font-size: 32px;
+    line-height: 1.2;
 }
 
 .intro p {
