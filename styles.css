@@ -564,4 +564,10 @@ li {
     .gallery-cursor {
         display: block;
     }
+
+    footer {
+        left: 30px;
+        bottom: 15px;
+        font-size: 10px;
+    }
 }
