@@ -488,8 +488,8 @@ li {
     }
 
     .about-page {
-        padding: 60px 30px;
-        gap: 70px;
+        padding: 80px 30px;
+        gap: 50px;
     }
 
     .intro {
@@ -507,7 +507,7 @@ li {
 
     .about-page .info-columns {
         flex-direction: column;
-        gap: 70px;
+        gap: 50px;
         margin-top: 0;
     }
 
@@ -565,8 +565,7 @@ li {
     }
 
     footer {
-        right: 30px;
-        bottom: 15px;
-        font-size: 10px;
+        font-size: 14px;
+        left: 30px;
     }
 }
