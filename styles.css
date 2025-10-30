@@ -473,7 +473,7 @@ li {
     }
 
     .about-page {
-        gap: 40px;
+        gap: 70px;
     }
 
     .intro {
@@ -491,7 +491,7 @@ li {
 
     .info-columns {
         flex-direction: column;
-        gap: 40px;
+        gap: 70px;
         margin-top: 0;
     }
 
