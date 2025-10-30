@@ -216,6 +216,21 @@ h2 {
     margin-bottom: 15px;
 }
 
+footer {
+    position: fixed;
+    bottom: 20px;
+    left: 60px;
+    font-family: 'TimesNow', serif;
+    font-size: 12px;
+    font-weight: 200;
+    color: #000;
+    z-index: 1000;
+}
+
+footer p {
+    margin: 0;
+}
+
 ul {
     list-style: none;
 }
