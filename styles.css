@@ -445,7 +445,6 @@ li {
         display: flex;
         flex-direction: column;
         padding-bottom: 0;
-        font-size: 16px;
     }
 
     .draw-prompt {
