@@ -188,7 +188,7 @@ main {
 
 .about-page .intro {
     flex: 0 0 auto;
-    max-width: 500px;
+    max-width: 750px;
     opacity: 0;
     font-size: 32px;
     line-height: 1.2;
